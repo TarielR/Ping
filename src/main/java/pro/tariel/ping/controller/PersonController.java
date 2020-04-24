@@ -18,12 +18,12 @@ public class PersonController {
         this.service = service;
     }
 
-    @GetMapping(value = "/persons")
+    @GetMapping(value = "/persons", produces = "application/json")
     public Collection<Person> retrieveAllPersons() {
         return service.getAllPersons();
     }
 
-    @GetMapping(value = "/person/{id}")
+    @GetMapping(value = "/person/{id}", produces = "application/json")
     public ResponseEntity<Person> retrievePersonById(@PathVariable long id) {
         return new ResponseEntity<>(service.getPersonById(id), HttpStatus.OK);
     }
