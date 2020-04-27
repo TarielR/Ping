@@ -42,13 +42,22 @@ class PersonControllerIT {
     }
 
     @Test
-    void onePersonShouldReturnMessageFromService() throws Exception {
-        String uri = "/person/1";
+    void oneValidPersonShouldReturnMessageFromService() throws Exception {
+        String uri = "/person/8";
         when(service.getPersonById(7L)).thenReturn(new PersonDto());
         this.mockMvc.perform(get(uri))
                 .andExpect(status().isOk());
         verify(service, times(1)).getPersonById(anyLong());
         verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    void oneNotValidPersonShouldReturnMessageFromController() throws Exception {
+        String uri = "/person/1";
+        when(service.getPersonById(7L)).thenReturn(new PersonDto());
+        this.mockMvc.perform(get(uri))
+                .andExpect(status().isBadRequest());
+        verifyNoInteractions(service);
     }
 
     @Test

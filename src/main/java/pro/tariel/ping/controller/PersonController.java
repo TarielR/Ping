@@ -25,6 +25,9 @@ public class PersonController {
 
     @GetMapping(value = "/person/{id}", produces = "application/json")
     public ResponseEntity<PersonDto> retrievePersonById(@PathVariable long id) {
+        if(id < 7 || id > 12) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(service.getPersonById(id), HttpStatus.OK);
     }
 }
