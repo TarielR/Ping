@@ -10,10 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pro.tariel.ping.domain.person.Address;
 import pro.tariel.ping.domain.person.Person;
+import pro.tariel.ping.domain.person.PersonDto;
 import pro.tariel.ping.service.PersonService;
 
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,16 +30,17 @@ class PersonControllerTest {
     @Mock
     private PersonService service;
 
-    private Collection persons;
+    private List<Person> persons;
     private Person person01;
+    private List<PersonDto> personDtoList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         Address address01 = new Address(1011, "Foster st.", "West Chester", "19380");
         Address address02 = new Address(202, "Grant Ave", "Philadelphia", "01001");
 
-        Person child01 = new Person(1L,"Anni", LocalDate.of(1999, 2, 3), null, null, null);
-        Person child02 = new Person(2L,"Tom", LocalDate.of(1997, 5, 31), null, null, address01);
+        Person child01 = new Person(1L, "Anni", LocalDate.of(1999, 2, 3), null, null, null);
+        Person child02 = new Person(2L, "Tom", LocalDate.of(1997, 5, 31), null, null, address01);
 
         List<Person> children01 = List.of(child01, child02);
 
@@ -49,18 +51,27 @@ class PersonControllerTest {
         persons = List.of(person01, person02, person03);
     }
 
+    //@Disabled
     @Test
     void retrieveAllPersons() {
+        for (Person p : persons) {
+            PersonDto pdto = convertToDto(p);
+//            System.out.println(pdto.getName() + "   " + pdto.getSpouseName());
+            personDtoList.add(pdto);
+        }
+
         // given
-        when(service.getAllPersons()).thenReturn(persons);
+        when(service.getAllPersons()).thenReturn(personDtoList);
 
         // when
-        List<Person> actual = (List<Person>) controller.retrieveAllPersons();
+         List<PersonDto> actual = controller.retrieveAllPersons();
 
         // then
         assertEquals(3, actual.size());
         assertEquals("John Smith", actual.get(0).getName());
+        assertEquals("Yulia Smith", actual.get(0).getSpouseName());
         assertEquals("Don Donalds", actual.get(2).getName());
+        assertNull(actual.get(2).getSpouseName());
         assertNotNull(actual.get(1).getAddress());
         assertNotNull(actual.get(1).getChildren());
         assertNull(actual.get(2).getChildren());
@@ -68,13 +79,24 @@ class PersonControllerTest {
         assertNotNull(actual.get(0).getChildren().get(1).getAddress());
     }
 
+    private PersonDto convertToDto(Person p) {
+        String spouseName = null;
+
+        if (null != p.getSpouseId()) {
+            spouseName = getSpouseName(p);
+        }
+
+        return new PersonDto(p, spouseName);
+    }
+
     @Test
     void retrievePersonById() {
+        PersonDto personDto = new PersonDto(person01, "Yulia Smith");
         // given
-        when(service.getPersonById(anyLong())).thenReturn(person01);
+        when(service.getPersonById(anyLong())).thenReturn(personDto);
 
         // when
-        ResponseEntity<Person> actual = controller.retrievePersonById(7L);
+        ResponseEntity<PersonDto> actual = controller.retrievePersonById(7L);
 
         // then
         assertNotNull(actual);
@@ -82,5 +104,16 @@ class PersonControllerTest {
         assertEquals(HttpStatus.OK, HttpStatus.OK);
         assertEquals(person01.getName(), actual.getBody().getName());
         assertNotNull(actual.getBody().getAddress());
+    }
+
+    private String getSpouseName(Person person) {
+
+        if(person.getSpouseId() == null)
+            return null;
+
+        return persons.stream()
+                .filter(a -> a.getId().equals(person.getSpouseId()))
+                //.forEach(s -> System.out.println(s.getName()));//
+         .findFirst().get().getName();
     }
 }

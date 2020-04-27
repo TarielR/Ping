@@ -1,10 +1,10 @@
 package pro.tariel.ping.service;
 
-import pro.tariel.ping.domain.person.Person;
+import pro.tariel.ping.domain.person.PersonDto;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface PersonService {
-    Person getPersonById(long id);
-    Collection<Person> getAllPersons();
+    PersonDto getPersonById(long id);
+    List<PersonDto> getAllPersons();
 }

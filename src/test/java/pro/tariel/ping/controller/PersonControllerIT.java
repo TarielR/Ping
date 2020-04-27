@@ -7,12 +7,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import pro.tariel.ping.domain.person.Person;
+import pro.tariel.ping.domain.person.PersonDto;
 import pro.tariel.ping.service.PersonService;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,7 +33,7 @@ class PersonControllerIT {
     @Test
     void allPersonsShouldReturnMessageFromService() throws Exception {
         String uri = "/persons";
-        when(service.getAllPersons()).thenReturn(List.of(new Person()));
+        when(service.getAllPersons()).thenReturn(List.of(new PersonDto()));
         this.mockMvc.perform(get(uri))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
@@ -45,7 +44,7 @@ class PersonControllerIT {
     @Test
     void onePersonShouldReturnMessageFromService() throws Exception {
         String uri = "/person/1";
-        when(service.getPersonById(7L)).thenReturn(new Person());
+        when(service.getPersonById(7L)).thenReturn(new PersonDto());
         this.mockMvc.perform(get(uri))
                 .andExpect(status().isOk());
         verify(service, times(1)).getPersonById(anyLong());
