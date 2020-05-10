@@ -34,6 +34,6 @@ public class PersonController {
 
     @PostMapping(value = "/person", produces = "application/json")
     public ResponseEntity<String> createPerson() {
-        return new ResponseEntity<>("Person is created successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Person is created successfully", HttpStatus.CREATED);
     }
 }
