@@ -8,3 +8,6 @@ and kill the procces with 'kill -9 PID_NUM'</p>
 <h3>API</h3>
 <p>GET localhost:9001/persons</p>
 <p>GET localhost:9001/person/{id)    id must be between 7 - 12</p>
+<p>POST localhost:9001/person</p>
+<hr/>
+<p>Swagger <code>http://localhost:9001/swagger-ui.html</code></p>

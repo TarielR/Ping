@@ -1,6 +1,7 @@
 package pro.tariel.ping.domain.person;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Person {
     private Long id;
+    @ApiModelProperty(notes = "The person name")
     private String name;
     private LocalDate dateOfBirth;
     //private Person spouse;
