@@ -6,7 +6,7 @@
 
     <groupId>pro.tariel</groupId>
     <artifactId>Ping</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2</version>
     <name>Ping</name>
     <description>Spring Boot app for consume REST response</description>
 
@@ -18,7 +18,10 @@
     </parent>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>13</java.version>
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 
     <scm>
@@ -59,9 +62,28 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Swagger -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
         <finalName>ping</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
     </build>
 </project>
